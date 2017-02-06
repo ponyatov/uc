@@ -1,0 +1,9 @@
+# uCompiler tests
+
+A=1+2*3
+
+.end
+core	= [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
+files 	= [ src.src log.log core .gitignore bat.bat ]
+touch files
+bat.bat = [ @gvim -p files ]
