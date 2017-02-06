@@ -1,7 +1,68 @@
-\documentclass{article}
+% ebook header
+\documentclass[oneside,10pt]{article}
+\usepackage[paperwidth=118.8mm,paperheight=68.2mm,margin=2mm]{geometry}
+\renewcommand{\familydefault}{\sfdefault}\normalfont
+\usepackage[unicode,colorlinks=true]{hyperref}
+%% Cyrillization
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+%% misc
+\newcommand{\note}[1]{\,\footnote{\ #1}}
+\newcommand{\email}[1]{$<$\href{mailto:#1}{#1}$>$}
+%% lang
+\newcommand{\cpp}{$C^+_+$}
+%% prog
+\newcommand{\make}{\textbf{make}}
+\newcommand{\git}{\textbf{git}}
+\newcommand{\gvim}{\textbf{(g)Vim}}
+\newcommand{\flex}{\textbf{flex}}
+\newcommand{\lex}{\textbf{lex}}
+\newcommand{\yacc}{\textbf{yacc}}
+\newcommand{\bison}{\textbf{bison}}
+\newcommand{\gpp}{\textbf{g++}}
+%% listings
+\usepackage{listings}
+\lstset{
+basicstyle=\small,
+frame=single,
+tabsize=4,
+}
+\newcommand{\lst}[2]{\lstinputlisting[title=#1]{#2}}
+
 \title{uCompiler: микрокомпилятор}
 \author{\copyright\ Dmitry Ponyatov \email{dponyatov@gmail.com}}
+
 \begin{document}
 \maketitle
-\tableofcontents
+\begin{abstracts}
+Рассмотрена реализация компилятора для простейшего арифметического языка на
+\flex/\bison/\cpp.
+\end{abstracts}
+\clearpage\tableofcontents\clearpage
+
+\section{Необходимое программное обеспечение}
+
+\begin{itemize}
+  \item пакет {mingw}\note{\url{http://www.mingw.org/}}: нужны пакеты
+  \gpp\ \make\ \flex\ \bison
+  \item рекомендуется текстовый редактор
+  \gvim\note{\url{http://vim.sourceforge.net/download.php#pc}}
+\end{itemize}
+
+\section{Структура проекта (lexical skeleton)}
+
+\begin{tabular}{l l l}
+src.src & script & тестовый скрипт на нашем языке \\
+log.log & & лог выполнения компилятора \\
+ypp.ypp & \yacc & описание синтаксиса (грамматика) \\
+lpp.lpp & \lex & регулярные выражения для лексем \\
+hpp.hpp & \cpp & общие хедеры \\
+cpp.cpp & \cpp & \\
+.gitignore & \git & маски файлов не включаемых в проект \\
+bat.bat & \gvim & helper для запуска редактора \\
+Makefile & \make & скрипт сборки проекта \\
+\end{tabular}
+
+\lst{Makefile}{doc/00.mk}
+
 \end{document}
