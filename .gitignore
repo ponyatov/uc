@@ -5,5 +5,5 @@
 ypp.tab.?pp
 lex.yy.c
 /tmp
-/pdf.pdf
-/pdf.synctex.gz
+*.pdf
+*.synctex.gz
