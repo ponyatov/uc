@@ -5,14 +5,24 @@
 \usepackage[unicode,colorlinks=true]{hyperref}
 \usepackage[pdftex]{graphicx}
 \newcommand{\fig}[3]{\noindent\includegraphics[#3]{#2}\textbf{\ #1}}
+\usepackage{enumitem}
 %% Cyrillization
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
+% xcolor fixes
+\usepackage{xcolor}
+\definecolor{red}{rgb}{0.7,0,0}		% R
+\definecolor{green}{rgb}{0,0.6,0}	% G
+\definecolor{blue}{rgb}{0,0,0.7}	% B
 %% misc
+\renewcommand{\emph}[1]{\textcolor{blue}{#1}}
 \newcommand{\note}[1]{\,\footnote{\ #1}}
 \newcommand{\email}[1]{$<$\href{mailto:#1}{#1}$>$}
+\newcommand{\term}[1]{\textcolor{green}{#1}}
+\newcommand{\error}[1]{\textcolor{red}{#1}}
 %% lang
 \newcommand{\cpp}{$C^+_+$}
+\newcommand{\py}{$Python$}
 %% prog
 \newcommand{\prog}[1]{\tetxbf{#1}}
 \newcommand{\file}[1]{\textit{#1}}
@@ -24,6 +34,7 @@
 \newcommand{\yacc}{\prog{yacc}}
 \newcommand{\bison}{\prog{bison}}
 \newcommand{\gpp}{\prog{g++}}
+\newcommand{\eclipse}{\prog{eclipse}}
 %% listings
 \usepackage{listings}
 \lstset{
@@ -33,7 +44,7 @@ tabsize=4,
 }
 \newcommand{\lst}[2]{\lstinputlisting[title=#1]{#2}}
 
-\title{uCompiler: микрокомпилятор}
+\title{$\mu$Compiler: микрокомпилятор}
 \author{\copyright\ Dmitry Ponyatov \email{dponyatov@gmail.com}}
 
 \begin{document}
@@ -70,12 +81,122 @@ Makefile & \make & скрипт сборки проекта \\
 \lst{\file{core.src}: ядро компилятора}{doc/core.src}
 \lst{\file{files.src}: файлы проекта}{doc/files.src}
 
-\subsection{Структура компилятора}
+\subsection{Структура типичного компилятора}
 
-\fig{}{tmp/compiler.pdf}{height=0.9\textheight}
+\fig{}{tmp/compiler.pdf}{height=0.5\textheight}
 
 \subsection{Сборка проекта утилитой [mingw32-]\make}
 
 \lst{Makefile}{doc/00.mk}
+
+\section{Лексер}
+
+\term{Лексический анализ}\ --- группировка единичных символов входного потока
+(исходного кода) в токены. \term{Токен} можно рассматривать как пару из двух
+элементов:
+\begin{description}[nosep]
+\item[тэг]\ \\маркер типа токена: идентификатор, число, оператор,\ldots
+\item[\term{лексема}]\ \\текстовое значение токена, полученное группировкой
+  нескольких символов 
+\end{description}
+
+\bigskip
+В нашем компиляторе будем использовать генератор лексеров\ --- программу \flex.
+
+\subsection{Тестовый файл \#00}
+
+Рассмотрим разбор следующего тестового файла:
+\lst{\file{src.src}: тест \#00}{doc/00.src}
+
+\clearpage
+Как мы видим он состоит из следующих элементов:
+\begin{itemize}[nosep]
+  \item \# комментарий
+  \item выражение с присвоением переменной
+  \item \term{директива} \verb|.end|
+  \item некая ахинея похожая на список файлов проекта\note{возможно когда-нибудь
+  наш компилятор сможет сгененировать собственный исходник из высокоуровневого
+  описания}
+\end{itemize}
+
+\bigskip
+Измените \file{Makefile} чтобы при сборке проекта использовался только лексер:
+\lst{\file{Makefile}: изоляция лексера}{doc/01.mk}
+
+\subsection{Структура файла лексера}
+
+\begin{verbatim}
+%{
+С(++) код включаемый в начало сгенерированного lex.yy.c
+%}
+
+%option ... /* опции */
+
+%%
+набор пар
+<регулярное выражение>:<С(++) действие над выделенной лексемой> 
+%%
+
+любой дополнительный С(++) код, например int main()
+\end{verbatim}
+
+\lst{\file{lpp.lpp}: пустой лексер}{doc/00.lpp}
+транслируется командой \verb|mingw32-make| в \file{lex.yy.c}, но
+\lst{\file{log.log}: ошибки}{doc/00.llg}
+
+\clearpage
+добавим пару опций
+\lst{\file{lpp.lpp}: пустой лексер}{doc/01.lpp}
+\lst{\file{log.log}: bypass исходного кода}{doc/01.llg}
+
+Все нераспознанные лексером символы входного потока по умолчанию копируются в
+выходной без изменений. Неплохо, но тот же результат проще получить командой
+копирования.
+
+\bigskip
+Добавим несколько регулярных выражений, которые
+\begin{itemize}
+  \item удалят все комментарии
+  \item удалят все пробельные символы\note{обычно в языках программирования они
+  имеют только фунцию улучшения читаемости, но не забываем про \py} и
+  \item остановят разбор по директиве \verb|.end|
+\end{itemize}
+
+\noindent
+Не забудьте про обязательный символ конца последней строки\ --- редактируя
+\file{lpp.lpp} в \eclipse\ я получил ошибку \error{lpp.lpp:5: EOF encountered
+inside an action}
+
+\lst{\file{lpp.lpp}: удаление лишнего}{doc/02.lpp}
+\lst{\file{log.log}: остались только значащие символы}{doc/02.llg}
+
+\subsection{\term{regexp}: регулярные выражения}
+
+\begin{tabular}{l l}
+\verb|.| & любой символ кроме \verb|\n| \\
+\verb|\n| & конец строки \\
+\verb|\r| & огрызок Micro\$oft \\
+\verb|\t| & табуляция \\
+\verb|(...)| & группа \\
+\verb|()?| & необязательное вхождение \\
+\verb|()*| & \emph{0}+ повторений \\
+\verb|()+| & \emph{1}+ повторений \\
+\verb|[...]| & один из символов набора \ldots \\
+\verb|[^...]| & любой символ \emph{кроме} \ldots \\
+\verb|{x}| & подстановка макрорегулярки определенной отдельно \\
+\end{tabular}
+
+\subsection{Лексемы тестового примера}
+
+И наконец выделим числа, операторы и переменные:
+
+\lst{\file{lpp.lpp}: полный набор \term{regexp}ов}{doc/03.lpp}
+\lst{\file{lpp.lpp}: числа (несколько вариантов)}{doc/04.lpp}
+пришлось перенести, в файле должны быть в одну строку
+\lst{\file{log.log}: числа}{doc/04.llg}
+\clearpage
+\lst{\file{lpp.lpp}: имена и операторы}{doc/05.lpp}
+\clearpage
+\lst{\file{log.log}: имена и операторы}{doc/05.llg}
 
 \end{document}

@@ -1,0 +1,10 @@
+%{
+	#include <iostream>
+	using namespace std;
+%}
+
+%option noyywrap main
+
+				// {m}acro regexps 
+S [\+\-]?
+N [0-9]+

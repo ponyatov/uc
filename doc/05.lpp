@@ -1,22 +1,3 @@
-%{
-	#include <iostream>
-	using namespace std;
-%}
-
-%option noyywrap main
-
-				// {m}acro regexps 
-S [\+\-]?
-N [0-9]+
-
-%%
-#.+				{}					/* drop comments */
-[ \t\r\n]+		{}					/* drop spaces */
-^.end			{yyterminate();}	/* stop lexer */
-
-{N}(\.[0-9]*)?([eE]{S}{N})?		{cout<< "<num:" << atof(yytext) <<"> "; }
-(\.[0-9]+)([eE]{S}{N})?			{cout<< "<num:" << atof(yytext) <<"> "; }
-
 [a-zA-Z0-9_]+	{cout<< "<id:" << yytext <<"> "; }
 
 \(				{cout<< "<op:" << yytext <<"> "; }

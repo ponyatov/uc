@@ -1,6 +1,6 @@
 # uCompiler tests
 
-A=1+2*3
+A=-1 ++2.3* 4e-5^(sin(.6)/7)
 
 .end
 core	= [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]

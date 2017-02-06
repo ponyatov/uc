@@ -1,0 +1,8 @@
+flex lpp.lpp
+g++ -o exe.exe lex.yy.c
+C:\Users\dmitry\AppData\Local\Temp\cczWxUH2.o:lex.yy.c:(.text+0x33f):
+undefined reference to `yywrap'
+C:\Users\dmitry\AppData\Local\Temp\cczWxUH2.o:lex.yy.c:(.text+0xcb2):
+undefined reference to `yywrap'
+c:/mingw/bin/../lib/gcc/mingw32/4.9.3/../../../libmingw32.a(main.o):
+(.text.startup+0xa0): undefined reference to `WinMain@16'

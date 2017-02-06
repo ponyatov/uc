@@ -1,0 +1,5 @@
+%option noyywrap main
+%%
+#.+				{}					/* drop comments	*/
+[ \t\r\n]+		{}					/* drop spaces		*/
+^.end			{yyterminate();}	/* stop lexer		*/

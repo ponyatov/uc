@@ -1,0 +1,5 @@
+<id:A>			<op:=>		<op:->			<num:1>
+<op:+>			<op:+>		<num:2.3>		<op:*> 
+<num:4e-005>	<op:^>		<op:(> 			<id:sin>
+<op:(>			<num:0.6>	<op:)>			<op:/>
+<num:7>			<op:)> 
