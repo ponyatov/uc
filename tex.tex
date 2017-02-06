@@ -3,6 +3,8 @@
 \usepackage[paperwidth=118.8mm,paperheight=68.2mm,margin=2mm]{geometry}
 \renewcommand{\familydefault}{\sfdefault}\normalfont
 \usepackage[unicode,colorlinks=true]{hyperref}
+\usepackage[pdftex]{graphicx}
+\newcommand{\fig}[3]{\noindent\includegraphics[#3]{#2}\textbf{\ #1}}
 %% Cyrillization
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
@@ -12,14 +14,16 @@
 %% lang
 \newcommand{\cpp}{$C^+_+$}
 %% prog
-\newcommand{\make}{\textbf{make}}
-\newcommand{\git}{\textbf{git}}
-\newcommand{\gvim}{\textbf{(g)Vim}}
-\newcommand{\flex}{\textbf{flex}}
-\newcommand{\lex}{\textbf{lex}}
-\newcommand{\yacc}{\textbf{yacc}}
-\newcommand{\bison}{\textbf{bison}}
-\newcommand{\gpp}{\textbf{g++}}
+\newcommand{\prog}[1]{\tetxbf{#1}}
+\newcommand{\file}[1]{\textit{#1}}
+\newcommand{\make}{\prog{make}}
+\newcommand{\git}{\prog{git}}
+\newcommand{\gvim}{\prog{(g)Vim}}
+\newcommand{\flex}{\prog{flex}}
+\newcommand{\lex}{\prog{lex}}
+\newcommand{\yacc}{\prog{yacc}}
+\newcommand{\bison}{\prog{bison}}
+\newcommand{\gpp}{\prog{g++}}
 %% listings
 \usepackage{listings}
 \lstset{
@@ -62,6 +66,15 @@ cpp.cpp & \cpp & \\
 bat.bat & \gvim & helper для запуска редактора \\
 Makefile & \make & скрипт сборки проекта \\
 \end{tabular}
+
+\lst{\file{core.src}: ядро компилятора}{doc/core.src}
+\lst{\file{files.src}: файлы проекта}{doc/files.src}
+
+\subsection{Структура компилятора}
+
+\fig{}{tmp/compiler.pdf}{height=0.9\textheight}
+
+\subsection{Сборка проекта утилитой [mingw32-]\make}
 
 \lst{Makefile}{doc/00.mk}
 

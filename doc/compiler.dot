@@ -1,0 +1,9 @@
+digraph {
+rankdir=LR;
+{rank=same lexer codegen}
+{rank=same frontend backend}
+lexer -> parser [label="tokens"];
+parser -> frontend [label="AST\ltree"];
+frontend -> backend [label="intermediate\lrepresentation"];
+backend -> codegen [label="assembler\lcode"];
+}
