@@ -5,6 +5,7 @@
 \usepackage[unicode,colorlinks=true]{hyperref}
 \usepackage[pdftex]{graphicx}
 \newcommand{\fig}[3]{\noindent\includegraphics[#3]{#2}\\\textbf{#1}}
+\newcommand{\figno}[2]{\noindent\includegraphics[#2]{#1}}
 \usepackage{enumitem}
 %% Cyrillization
 \usepackage[utf8]{inputenc}
@@ -22,6 +23,7 @@
 \newcommand{\error}[1]{\textcolor{red}{#1}}
 %% lang
 \newcommand{\cpp}{$C^+_+$}
+\newcommand{\java}{$Jaba$}
 \newcommand{\py}{$Python$}
 %% prog
 \newcommand{\prog}[1]{\textbf{#1}}
@@ -201,5 +203,95 @@ inside an action}
 \lst{\file{lpp.lpp}: имена и операторы}{doc/05.lpp}
 \clearpage
 \lst{\file{log.log}: имена и операторы}{doc/05.llg}
+
+\clearpage
+\section{Синтаксический разбор}
+
+Для разбора вложенных конструкций, таких как математические выражения,
+регулярные выражения не подходят. В дело вступает (E)BNF нотация, в которой
+может быть описана грамматика почти любого языка программирования\note{за
+исключением особо клинических случаев типа \java\ и \cpp} или текстовоо формата
+данных.
+
+Так как тема разбора обсасывалась со всех сторон со времен появления первых
+компиляторов, она считается $\pm$решенной проблемой информатики, и для описания
+\term{грамматики} языка давно существует даже стандарт нотации
+(E)BNF\note{[E]xtended [B]ackus-[N]aur [F]orm notation, (расширенная) форма
+Бахуса-Наура}:
+\begin{itemize}
+  \item
+  \href{https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D1%84%D0%BE%D1%80%D0%BC%D0%B0_%D0%91%D1%8D%D0%BA%D1%83%D1%81%D0%B0_%E2%80%94_%D0%9D%D0%B0%D1%83%D1%80%D0%B0}{wiki}}
+  расширенная форма Бэкуса\ - Наура
+  \item
+  \href{https://groups.google.com/forum/?hl=ru#!forum/localizations}{Локализация}
+  стандарта
+  \href{http://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip}{ISO/IEC
+  14977:1996(E) (Extended BNF)}
+\end{itemize}
+
+\subsection{Расширенная форма Бакуса-Наура}
+
+Согласно Википедии\note{\emph{wikipedia всегда предпочтительнее английская
+версия}\ --- в русской даже ссылки на статьи и инструменты перенести не могут, и
+объем текста часто на порядок меньше}, EBNF\ --- семейство
+\term{метаязыков}\note{язык для описания языка} для описания грамматик
+контекстно-свободных языков\note{за подробностями и терминами\ --- просим в
+Книгу Дракона \cite{dragon}}. Грамматика описывается в виде набора правил,
+в котором одни синтаксические элементы последовательно определяются через
+другие.
+
+Стандарт ISO/IEC 14977:1996(E) определяет EBNF как \term{синтаксический
+метаязык}.
+
+\clearpage
+Правила состоят из
+\begin{description}[nosep]
+  \item[ \term{терминал}ов = терминальных символов] и\\
+  \term{терминал}\ --- минимальный элемент грамматики, не имеющий собственной
+  грамматической структуры. В качестве терминалов должны рассматриваться
+  прежде всего \term{токен}ы, возвращаемые лексером, но иногда используют
+  просто \term{цепочки} символов в кавычках.
+  \item[ \term{нетерминал}ов = продукционных правил]\\
+  \term{нетерминал}\ --- элемент грамматики, имеющий собственное имя и
+  структуру.
+\end{itemize}
+
+\begin{verbatim}
+язык   = калькулятор
+\end{verbatim}
+
+\begin{verbatim}
+// в описании грамматики нам нужно задать список токенов
+// он будет передан лексеру
+токены = [ переменная число = + - * / ^ ]
+\end{verbatim}
+
+\begin{verbatim}
+// [R]ead [E]val [P]rint [L]oop
+// цикл  
+REPL := выражение * { вывести выражение }
+выражение := символ 
+\end{verbatim}
+
+\clearpage
+\subsection{Ассоциативность операторов}
+
+\noindent
+\begin{tabular}{p{0.5\textwidth} p{0.5\textwidth}}
+\begin{minipage}{0.5\textwidth}
+\figno{L.pdf}{width=.8\textwidth}
+\end{minipage}
+&
+\begin{minipage}{0.5\textwidth}
+\figno{R.pdf}{width=.8\textwidth}
+\end{minipage}
+\\
+\emph{лево}ассоциативный разбор&
+\emph{право}ассоциативный разбор\\
+$A+B+C$&$A=B=C$\\
+\end{tabular}
+
+\clearpage
+\subsection{Приоритет операторов}
 
 \end{document}

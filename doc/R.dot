@@ -1,0 +1,8 @@
+digraph R {
+X[label="="]; 
+Y[label="="]; 
+X-> B;
+X-> C;
+Y-> A;
+Y-> X;
+}

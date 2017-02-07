@@ -1,7 +1,7 @@
 %%
 #.+				{}					/* drop comments */
-[ \t\r\n]+		{}					/* drop spaces */
-^.end			{yyterminate();}	/* stop lexer */
+[ \t\r\n]+		{}					/* drop spaces   */
+^.end			{yyterminate();}	/* stop lexer    */
 
 {N}(\.[0-9]*)?([eE]{S}{N})?
 				{cout<< "<num:" << atof(yytext) <<">"; }

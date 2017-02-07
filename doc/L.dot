@@ -1,0 +1,8 @@
+digraph L {
+X[label="+"]; 
+Y[label="+"]; 
+X-> A;
+X-> B;
+Y-> X;
+Y-> C;
+}
