@@ -1,0 +1,30 @@
+digraph { rankdir = LR;
+{
+rank=same;
+"ypp.ypp"
+"lpp.lpp"
+"hpp.hpp"
+"cpp.cpp"
+}
+"ypp.ypp" -> "ypp.tab.cpp" [label="\ bison"]
+"ypp.ypp" -> "ypp.tab.hpp" [label="\ bison"]
+"lpp.lpp" -> "lex.yy.c" [label="\n flex"]
+"ypp.tab.cpp" -> C
+"ypp.tab.hpp" -> H
+"lex.yy.c" -> C
+"cpp.cpp" -> C
+"hpp.hpp" -> H
+C [shape=box]
+H [shape=box]
+L [shape=box]
+"[libc]" -> L [label="\ by linker"]
+C -> "g++" [label="\ [C]++ code"]
+H -> "g++" [label="\ [H]eaders"]
+L -> "g++" [label="\ [L]ibs"]
+"g++" -> "./exe.exe"
+{
+rank=same
+"src.src" -> "./exe.exe"
+"./exe.exe" -> "log.log"
+}
+}

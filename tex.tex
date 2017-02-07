@@ -4,7 +4,7 @@
 \renewcommand{\familydefault}{\sfdefault}\normalfont
 \usepackage[unicode,colorlinks=true]{hyperref}
 \usepackage[pdftex]{graphicx}
-\newcommand{\fig}[3]{\noindent\includegraphics[#3]{#2}\textbf{\ #1}}
+\newcommand{\fig}[3]{\noindent\includegraphics[#3]{#2}\\\textbf{#1}}
 \usepackage{enumitem}
 %% Cyrillization
 \usepackage[utf8]{inputenc}
@@ -24,7 +24,7 @@
 \newcommand{\cpp}{$C^+_+$}
 \newcommand{\py}{$Python$}
 %% prog
-\newcommand{\prog}[1]{\tetxbf{#1}}
+\newcommand{\prog}[1]{\textbf{#1}}
 \newcommand{\file}[1]{\textit{#1}}
 \newcommand{\make}{\prog{make}}
 \newcommand{\git}{\prog{git}}
@@ -49,10 +49,10 @@ tabsize=4,
 
 \begin{document}
 \maketitle
-\begin{abstracts}
+\begin{abstract}
 Рассмотрена реализация компилятора для простейшего арифметического языка на
 \flex/\bison/\cpp.
-\end{abstracts}
+\end{abstract}
 \clearpage\tableofcontents\clearpage
 
 \section{Необходимое программное обеспечение}
@@ -61,7 +61,7 @@ tabsize=4,
   \item пакет {mingw}\note{\url{http://www.mingw.org/}}: нужны пакеты
   \gpp\ \make\ \flex\ \bison
   \item рекомендуется текстовый редактор
-  \gvim\note{\url{http://vim.sourceforge.net/download.php#pc}}
+  \gvim\note{\url{http://vim.sourceforge.net/download.php\#pc}}
 \end{itemize}
 
 \section{Структура проекта (lexical skeleton)}
@@ -79,11 +79,14 @@ Makefile & \make & скрипт сборки проекта \\
 \end{tabular}
 
 \lst{\file{core.src}: ядро компилятора}{doc/core.src}
-\lst{\file{files.src}: файлы проекта}{doc/files.src}
+% \lst{\file{files.src}: файлы проекта}{doc/files.src}
+
+\fig{файлы типового проекта лексической
+программы}{files.pdf}{width=\textwidth}
 
 \subsection{Структура типичного компилятора}
 
-\fig{}{tmp/compiler.pdf}{height=0.5\textheight}
+\fig{}{compiler.pdf}{height=0.6\textheight}
 
 \subsection{Сборка проекта утилитой [mingw32-]\make}
 

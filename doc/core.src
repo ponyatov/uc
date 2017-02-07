@@ -1,1 +1,2 @@
-core = [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
+core  = [ ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
+files = [ src.src log.log core .gitignore bat.bat  ]
