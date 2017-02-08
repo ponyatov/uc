@@ -4,7 +4,7 @@
 %defines %union { Sym*o; }
 %token <o> SYM NUM STR					/* symbol number string	*/
 %token <o> EQ ADD SUB MUL DIV POW LP RP	/* + - * / ^ ( )		*/
-%type <o> ex scalar						/* expression scalar	*/
+%type <o> ex 							/* expression scalar	*/
 
 										/* precedence table: down higher */ 
 %right EQ
@@ -15,19 +15,39 @@
 
 %%
 REPL : | REPL ex { cout << $2->dump() << endl; } ;
-scalar : SYM | NUM | STR ;
-ex : scalar ;
-ex : SYM LP ex RP		{ $$=new Op("@");				// apply
+
+ex : SYM				{ $$=$1; /* terminal as is */ } ;
+ex : NUM 				{ $$=$1; /* terminal as is */
+	// synth
+	$$->attr["num"] = new Num(dynamic_cast<Num*>($1)->val);
+	} ;
+
+ex : SYM LP ex RP		{ $$=new Op("@");				// apply operator
    						  $$->push(new Fn($1->val));	// new function
 						  $$->push($3);					// parameters
-						} ;
-ex : LP ex RP			{ $$=$2; } ;
+	// synth
+	if ($1->val=="sin")
+		$$->attr["num"] = new Num(std::sin(\
+			dynamic_cast<Num*>($3->attr["num"])->val));
+	} ;
+
+ex : LP ex RP			{ $$=$2; /* as is */ } ; // must be after SYM(ex)
+
 ex : ADD ex %prec PFX	{ $$=$1; $$->push($2); } ;
 ex : SUB ex %prec PFX	{ $$=$1; $$->push($2); } ;
+
 ex : ex ADD ex			{ $$=$2; $$->push($1); $$->push($3); } ;
 ex : ex SUB ex			{ $$=$2; $$->push($1); $$->push($3); } ;
 ex : ex MUL ex			{ $$=$2; $$->push($1); $$->push($3); } ;
-ex : ex DIV ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+
+ex : ex DIV ex			{ $$=$2; $$->push($1); $$->push($3);
+   $$->attr["num"] = new Num(\
+	dynamic_cast<Num*>($1->attr["num"])->val \
+	/ \
+	dynamic_cast<Num*>($3->attr["num"])->val \
+	);
+   } ;
+
 ex : ex POW ex			{ $$=$2; $$->push($1); $$->push($3); } ;
 ex : ex EQ  ex			{ $$=$2; $$->push($1); $$->push($3); } ;
 

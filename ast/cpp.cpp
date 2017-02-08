@@ -19,6 +19,7 @@ string Sym::dump(int depth) { string S = "\n"+pad(depth)+head();
 	return S; }
 
 Num::Num(string V):Sym("num","") { val=atof(V.c_str()); }
+Num::Num(double F):Sym("num","") { val=F; }
 string Num::head() { ostringstream os;
 	os << val <<" #"<< this ; return os.str(); }
 

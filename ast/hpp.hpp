@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <vector>
 #include <map>
+#include <cmath>
 using namespace std;
 
 struct Sym {		// universal algebraic symbolic type, struct applies public
@@ -26,6 +27,7 @@ struct Sym {		// universal algebraic symbolic type, struct applies public
 };
 
 struct Num: Sym { Num(string);		// number tokens
+	Num(double);					// direct number constructor
 	double val; string head(); };
 struct Str: Sym { Str(string);		// 'string' tokens
 	string head(); };
