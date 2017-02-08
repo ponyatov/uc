@@ -3,7 +3,7 @@
     		string name;
     		double value;
     		virtual string dump(int depth=0);
-    		vector<Sym*> nest; void push(Sym*);
+    		vector<AST*> nest; void push(Sym*);
     	} *node;
     }
 
@@ -24,11 +24,11 @@
     ex : NUM			{ $$=$1; } ; // token as is
     
     ex : ADD ex %prec PFX {
-    	$$=$1; $$->push($2);				// unnary operator AST subtree
+    	$$=$1; $$->push($2);				// unary operator AST subtree
     	$$->value = + $2->value;			// + A
     	};
     ex : SUB ex %prec PFX {
-    	$$=$1; $$->push($2);				// unnary operator AST subtree
+    	$$=$1; $$->push($2);				// unary operator AST subtree
     	$$->value = - $2->value;			// - A
     	};
     
