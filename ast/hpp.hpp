@@ -20,6 +20,7 @@ struct Sym {		// universal algebraic symbolic type, struct applies public
 	Sym* push(Sym*o);				// / push new nested element
 
 	map<string,Sym*> attr;			// \ named attributes, you require it
+	double num;						// / or extra attributes you need
 
 	virtual string head();			// return "<T:V>" pair repr
 	string pad(int);				// pad output of tree elements
