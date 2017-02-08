@@ -1,0 +1,26 @@
+%{
+#include "hpp.hpp"
+%}
+%option noyywrap yylineno
+
+S	[\+\-]?
+N	[0-9]+
+%%
+#.+				{}					/* drop comments	*/
+[ \t\r\n]+		{}					/* drop spaces		*/
+^.end			{yyterminate();}	/* stop lexer		*/
+
+\(				TOC(Op,LP)			/* brackets			*/
+\)				TOC(Op,RP)
+
+\=				TOC(Op,EQ)			/* operators		*/
+
+\+				TOC(Op,ADD)
+\-				TOC(Op,SUB)
+\*				TOC(Op,MUL)
+\/				TOC(Op,DIV)
+\^				TOC(Op,POW)
+
+{N}(\.[0-9]*)?([eE]{S}{N})?		TOC(Num,NUM)	/* number */
+[a-zA-Z0-9_]+					TOC(Sym,SYM)	/* symbol */
+

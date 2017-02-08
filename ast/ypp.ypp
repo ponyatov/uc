@@ -1,0 +1,33 @@
+%{
+#include "hpp.hpp"
+%}
+%defines %union { Sym*o; }
+%token <o> SYM NUM STR					/* symbol number string	*/
+%token <o> EQ ADD SUB MUL DIV POW LP RP	/* + - * / ^ ( )		*/
+%type <o> ex scalar						/* expression scalar	*/
+
+										/* precedence table: down higher */ 
+%right EQ
+%left ADD SUB
+%left MUL DIV
+%left POW
+%right PFX
+
+%%
+REPL : | REPL ex { cout << $2->dump() << endl; } ;
+scalar : SYM | NUM | STR ;
+ex : scalar ;
+ex : SYM LP ex RP		{ $$=new Op("@");				// apply
+   						  $$->push(new Fn($1->val));	// new function
+						  $$->push($3);					// parameters
+						} ;
+ex : LP ex RP			{ $$=$2; } ;
+ex : ADD ex %prec PFX	{ $$=$1; $$->push($2); } ;
+ex : SUB ex %prec PFX	{ $$=$1; $$->push($2); } ;
+ex : ex ADD ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+ex : ex SUB ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+ex : ex MUL ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+ex : ex DIV ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+ex : ex POW ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+ex : ex EQ  ex			{ $$=$2; $$->push($1); $$->push($3); } ;
+
