@@ -11,7 +11,7 @@ ypp.tab.cpp: ypp.ypp
 lex.yy.c: lpp.lpp
 	flex $<
 
-tex: tmp/compiler.pdf tmp/files.pdf tmp/L.pdf tmp/R.pdf
+tex: tmp/compiler.pdf tmp/frontback.pdf tmp/files.pdf tmp/L.pdf tmp/R.pdf
 	
 tmp/%.pdf: doc/%.dot
 	dot -Tpdf -o$@ $<

@@ -1,9 +1,23 @@
-digraph {
+digraph compiler { 
+margin=0;
+pad=0;
+//nodesep=0;
 rankdir=LR;
-{rank=same lexer codegen}
-{rank=same frontend backend}
-lexer -> parser [label="tokens"];
-parser -> frontend [label="AST\ltree"];
-frontend -> backend [label="intermediate\lrepresentation"];
-backend -> codegen [label="assembler\lcode"];
+//compound=true;
+
+	subgraph cluster_frontend { label="frontend";
+	//rankdir=LR;
+		lexer -> parser [label=" tokens"];
+		parser -> ILopt [label=" IL\l (AST)"];
+		ILopt [label=" IL\noptimizer"];
+	}
+
+	subgraph cluster_backend { label="backend"; pad=1;
+	//rankdir=LR;
+		Mopt -> codegen;
+		Mopt [label="machine\noptimizer"];
+		{ codegen [label="code\ngenerator"] } ->asm [label=" assembly"];
+		asm [label ="machine\lcode",shape=box];
+	}
+
 }

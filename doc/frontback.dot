@@ -1,0 +1,27 @@
+digraph compiler {
+//margin=0; 
+pad=0;
+rankdir=TB;
+compound=true;
+
+//ILopt -> Mopt [label=" IL",ltail=cluster_frontend,lhead=cluster_backend];
+ subgraph cluster { label="multi system";
+ subgraph cluster_F{ label="programming language";
+//  frontend; 
+Cpp; Pascal;
+ }
+ subgraph cluster_B{ label="target machine"; labelloc=b;
+//  backend; 
+x86; avr8; ARM;
+ }
+ 
+ Cpp[label="C++"];
+ 
+ { frontend [shape=box] } -> { backend [shape=box] } [label=" IL"];
+ 
+ //Cpp -> backend;
+ Cpp->x86;Cpp -> avr8; Cpp -> ARM; 
+ Pascal->x86;Pascal -> avr8; Pascal -> ARM; 
+ //{rank=same; frontend; backend;}
+ }
+}

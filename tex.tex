@@ -18,9 +18,11 @@
 %% misc
 \renewcommand{\emph}[1]{\textcolor{blue}{#1}}
 \newcommand{\note}[1]{\,\footnote{\ #1}}
+\newcommand{\cp}[1]{\note{\copyright\ #1}}
 \newcommand{\email}[1]{$<$\href{mailto:#1}{#1}$>$}
 \newcommand{\term}[1]{\textcolor{green}{#1}}
 \newcommand{\error}[1]{\textcolor{red}{#1}}
+\usepackage{framed}
 %% lang
 \newcommand{\cpp}{$C^+_+$}
 \newcommand{\java}{$Jaba$}
@@ -88,7 +90,24 @@ Makefile & \make & скрипт сборки проекта \\
 
 \subsection{Структура типичного компилятора}
 
-\fig{}{compiler.pdf}{height=0.6\textheight}
+\fig{}{compiler.pdf}{width=\textwidth}
+
+\fig{}{frontback.pdf}{width=0.8\textwidth}
+
+\begin{description}[nosep]
+\item[frontend]\ \\язык программирования транслируется в промежуточную форму
+(IL)\note{[I]ntermediate [L]anguage} \begin{description}[nosep]
+\item[лексер]
+\item[парсер]
+\item[оптимизатор промежуточного представления]
+\end{description}
+\item[backend] промежуточная форма (IL) компилируется в машинный код конкретной
+\term{целевой машины}
+\begin{description}[nosep]
+\item[оптимизатор целевой машины]
+\item[кодогенератор]
+\end{description}
+\end{description}
 
 \subsection{Сборка проекта утилитой [mingw32-]\make}
 
@@ -205,6 +224,36 @@ inside an action}
 \lst{\file{log.log}: имена и операторы}{doc/05.llg}
 
 \clearpage
+\section{Грамматика: (мета)язык описания языков}
+
+Языки формируют ландшафт информатики и вычислений
+\cp{\url{http://matt.might.net/articles/grammars-bnf-ebnf/}}:
+языки программирования, спецификации протоколов, языки запросов, форматы файлов,
+языки определения шаблонов, карты памяти, формальные языки, конфигурационные
+файлы и языков разметки, языки форматирования, абстрактные языки математики и
+метаязыки формируют колею использования компьютеров и вычислений.
+\begin{framed}
+\term{Грамматика} это язык описания языков, или \term{метаязык}.
+\end{framed}
+А что определяет сам язык\,?
+За каждым языком стоит \term{грамматика}, которая определяет его структуру.
+
+\noindent
+Кратко рассмотрим широко известный метаязык Backus-Naur Form
+(BNF)\note{форма Бахуса--Наура}, и пару его разновидностей: Extended
+Backus-Naur Form (EBNF) и регулярные расширения BNF.
+
+\subsection{Определение языка}
+
+Язык определяется грамматикой. В информатике преимущественно используются
+\term{контекстно-свободные грамматики}, и нам их будет достаточно:
+\term{КС-грамматики} имеют достаточную описательную силу, чтобы определить
+рекурсивную структуру большинства (но не всех) компьютерных языков и текстовых
+форматов данных.
+
+\subsection{Компоненты контекстно-свободной грамматики}
+
+\clearpage
 \section{Синтаксический разбор}
 
 Для разбора вложенных конструкций, таких как математические выражения,
@@ -220,7 +269,7 @@ inside an action}
 Бахуса--Наура}:
 \begin{itemize}
   \item
-  \href{https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D1%84%D0%BE%D1%80%D0%BC%D0%B0_%D0%91%D1%8D%D0%BA%D1%83%D1%81%D0%B0_%E2%80%94_%D0%9D%D0%B0%D1%83%D1%80%D0%B0}{wiki}}
+  \href{https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F_%D1%84%D0%BE%D1%80%D0%BC%D0%B0_%D0%91%D1%8D%D0%BA%D1%83%D1%81%D0%B0_%E2%80%94_%D0%9D%D0%B0%D1%83%D1%80%D0%B0}{wiki}
   расширенная форма Бэкуса--Наура
   \item
   \href{https://groups.google.com/forum/?hl=ru#!forum/localizations}{Локализация}
@@ -253,24 +302,24 @@ inside an action}
   \item[ \term{нетерминал}ов = продукционных правил]\ \\
   \term{нетерминал}\ --- элемент грамматики, имеющий собственное имя и
   структуру.
-\end{itemize}
+\end{description}
 
-\begin{verbatim}
-язык   = калькулятор
-\end{verbatim}
-
-\begin{verbatim}
-// в описании грамматики нам нужно задать список токенов
-// он будет передан лексеру
-токены = [ переменная число = + - * / ^ ]
-\end{verbatim}
-
-\begin{verbatim}
-// [R]ead [E]val [P]rint [L]oop
-// цикл  
-REPL := выражение * { вывести выражение }
-выражение := символ 
-\end{verbatim}
+% \begin{verbatim}
+% язык   = калькулятор
+% \end{verbatim}
+% 
+% \begin{verbatim}
+% // в описании грамматики нам нужно задать список токенов
+% // он будет передан лексеру
+% токены = [ переменная число = + - * / ^ ]
+% \end{verbatim}
+% 
+% \begin{verbatim}
+% // [R]ead [E]val [P]rint [L]oop
+% // цикл  
+% REPL := выражение * { вывести выражение }
+% выражение := символ 
+% \end{verbatim}
 
 \clearpage
 \subsection{Ассоциативность операторов}
@@ -292,5 +341,30 @@ $A+B+C$&$A=B=C$\\
 
 \clearpage
 \subsection{Приоритет операторов}
+
+\subsection{Структура файла парсера}
+
+Структура файла парсера \file{ypp.ypp}\ аналогична файлу лексера: 
+
+\begin{verbatim}
+%{
+С(++) код включаемый в начало сгенерированного ypp.tab.cpp
+%}
+
+%defines %union { <перечень типов узлов дерева разбора >}
+
+%token<тип1> токен11 токен12 \ldots
+%token<тип2> токен21 токен22 \ldots
+
+%type <тип> <список нетерминалов>
+
+%%
+<продукционные правила c блоками С(++) кода
+  выполняемого при срабатывании правила>
+%%
+
+любой дополнительный С(++) код, например int main()
+\end{verbatim}
+
 
 \end{document}
