@@ -92,20 +92,24 @@ Makefile & \make & скрипт сборки проекта \\
 
 \fig{}{compiler.pdf}{width=\textwidth}
 
-\fig{}{frontback.pdf}{width=0.8\textwidth}
+\fig{}{frontback.pdf}{width=0.75\textwidth}
 
+\clearpage
 \begin{description}[nosep]
 \item[frontend]\ \\язык программирования транслируется в промежуточную форму
 (IL)\note{[I]ntermediate [L]anguage} \begin{description}[nosep]
-\item[лексер]
-\item[парсер]
+\item[лексер]\ \\группировка единичных символов в токены \ref{lexer} 
+\item[парсер]\ \\синтаксический разбор \ref{parser} потока лексем в соответствии
+с грамматикой \ref{grammar} языка
 \item[оптимизатор промежуточного представления]
 \end{description}
-\item[backend] промежуточная форма (IL) компилируется в машинный код конкретной
+\item[backend]\ \\промежуточная форма (IL) компилируется в машинный код
+конкретной
 \term{целевой машины}
 \begin{description}[nosep]
 \item[оптимизатор целевой машины]
-\item[кодогенератор]
+\item[кодогенератор]\ \\генерация машинного кода, или исходного кода
+на ассемблере
 \end{description}
 \end{description}
 
@@ -113,7 +117,7 @@ Makefile & \make & скрипт сборки проекта \\
 
 \lst{Makefile}{doc/00.mk}
 
-\section{Лексер}
+\section{Лексер}\label{lexer}
 
 \term{Лексический анализ}\ --- группировка единичных символов входного потока
 (исходного кода) в токены. \term{Токен} можно рассматривать как пару из двух
@@ -224,7 +228,7 @@ inside an action}
 \lst{\file{log.log}: имена и операторы}{doc/05.llg}
 
 \clearpage
-\section{Грамматика: (мета)язык описания языков}
+\section{Грамматика: (мета)язык описания языков}\label{grammar}
 
 Языки формируют ландшафт информатики и вычислений
 \cp{\url{http://matt.might.net/articles/grammars-bnf-ebnf/}}:
