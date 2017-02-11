@@ -510,6 +510,40 @@ zone            =   (FWS ( "+" / "-" ) 4DIGIT) / obs-zone
 \end{verbatim}
 
 \clearpage
+\subsection{Регулярные расширения RBNF}
+
+Часто вы можете найти в грамматиках определения
+\href{http://matt.might.net/articles/sculpting-text/}{похожие на регулярные
+выражения}.
+Например их использует
+\href{http://docs.python.org/3/reference/lexical_analysis.html}{спецификация
+языка \py}.
+
+\begin{itemize}[nosep]
+  \item \verb|postfix *| обозначает ``повтор 0+ раз''
+  \item \verb|postfix +| повтор 1+ раз
+  \item \verb|postfix ?| повтор 0 или 1 раз, т.е. опция
+\end{itemize}
+
+Определение литералов чисел в \py\ является хорошим примером комбинации
+нескольких нотаций:
+\begin{verbatim}
+floatnumber   ::=  pointfloat | exponentfloat
+pointfloat    ::=  [intpart] fraction | intpart "."
+exponentfloat ::=  (intpart | pointfloat) exponent
+intpart       ::=  digit+
+fraction      ::=  "." digit+
+exponent      ::=  ("e" | "E") ["+" | "-"] digit+
+\end{verbatim}
+
+RBNF не использует угловые скобки (как многие варианты ABNF и EBNF), но
+все еще использует \verb|::=| как BNF. RBNF смешивает регулярные операции типа
+\verb|+| для непустых повторов с \verb|[ ]| из EBNF для опциональных элементов.
+
+Грамматика \href{http://docs.python.org/3/reference/grammar.html}{для всего
+языка \py} испольует немного отличающийся, но все еще регулярный диалект RBNF.
+
+\clearpage
 \section{Синтаксический разбор}
 
 Так как тема разбора обсасывалась со всех сторон со времен появления первых
